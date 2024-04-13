@@ -6,9 +6,7 @@
 (require (prefix-in re- parser-tools/lex-sre))
 
 (define-tokens a (NUM VAR))
-(define-empty-tokens b (+ - * / % CREATE IN EOF BIOR))
-
-; https://docs.racket-lang.org/parser-tools/Lexers.html
+(define-empty-tokens b (+ - * / % BIND CREATE FALSE TRUE IN EOF BIOR))
 
 (define-lex-trans
  number
@@ -19,26 +17,27 @@
                   (syntax-rules ()
                     [(_ digit) (re-+ digit)]))
 
-(define-lex-abbrevs ;
- [digits (char-range "0" "9")]
- [number10 (number digits)]
- [identifier-characters (re-or (char-range "A" "z"))]
- [identifier (re-+ identifier-characters)])
+(define-lex-abbrevs [digits (char-range "0" "9")]
+                    [number10 (number digits)]
+                    [identifier-characters (re-or (char-range "A" "z"))]
+                    [identifier (re-+ identifier-characters)])
 
 (define abrv_lex
-  (lexer ;
-   ["sbtn" (token--)]
-   ["adtn" (token-+)]
-   ["crte" (token-CREATE)]
-   ["in" (token-IN)]
-   ["mltp" (token-*)]
-   ["dvsn" (token-/)]
-   ["rmdr" (token-%)]
-   ["bior" (token-BIOR)]
-   [(re-+ number10) (token-NUM (string->number lexeme))]
-   [identifier (token-VAR lexeme)]
-   [whitespace (abrv_lex input-port)] ; recursively calls the lexer
-   [(eof) (token-EOF)]))
+  (lexer ["sbtn" (token--)]
+         ["adtn" (token-+)]
+         ["crte" (token-CREATE)]
+         ["in" (token-IN)]
+         ["mltp" (token-*)]
+         ["dvsn" (token-/)]
+         ["rmdr" (token-%)]
+         ["bior" (token-BIOR)]
+         ["bind" (token-BIND)]
+         ["#f" (token-FALSE)]
+         ["#t" (token-TRUE)]
+         [(re-+ number10) (token-NUM (string->number lexeme))]
+         [identifier (token-VAR lexeme)]
+         [whitespace (abrv_lex input-port)] ; recursively calls the lexer
+         [(eof) (token-EOF)]))
 
 (define-struct let-exp (var num exp))
 (define-struct arith-exp (op e1 e2))
@@ -46,27 +45,22 @@
 (define-struct var-exp (i))
 
 (define abrv_parse
-  (parser ;
-   (start exp)
-   (end EOF)
-   (error void)
-   (tokens a b)
-   (precs (left + -) (right / %) (nonassoc EOF))
-   (grammar (exp ;
-             [(exp * exp) (make-arith-exp * $1 $3)]
-             [(exp / exp) (make-arith-exp / $1 $3)] ; Right associativity for division
-             [(exp % exp) (make-arith-exp remainder $1 $3)] ; Right associativity for modulo
-             [(CREATE VAR NUM IN exp) (make-let-exp $2 (num-exp $3) $5)]
-             ;  [(CREATE VAR NUM IN exp) (make-let-exp $2 (num-exp $3) $5)]
-             [(NUM) (num-exp $1)]
-             [(VAR) (var-exp $1)]
-             ;  operators
-             [(exp - exp) (make-arith-exp - $1 $3)]
-             [(exp + exp) (make-arith-exp + $1 $3)]
-             ;  conditionals
-             ;  [(exp BIOR exp) (make-arith-exp or $1 $3)] ;
-             ;  [(exp > exp) (make-arith-exp $1 $3)]
-             ))))
+  (parser (start exp)
+          (end EOF)
+          (error void)
+          (tokens a b)
+          (precs (left + -) (left * / %) (nonassoc EOF))
+          (grammar (exp ;
+                    [(exp % exp) (make-arith-exp remainder $1 $3)]
+                    [(exp * exp) (make-arith-exp * $1 $3)]
+                    [(exp / exp) (make-arith-exp / $1 $3)]
+                    [(exp + exp) (make-arith-exp + $1 $3)]
+                    [(exp - exp) (make-arith-exp - $1 $3)]
+                    [(exp BIOR exp) (make-arith-exp test_BIOR $1 $3)]
+                    [(exp BIND exp) (make-arith-exp test_BIND $1 $3)]
+                    [(CREATE VAR NUM IN exp) (make-let-exp $2 (num-exp $3) $5)]
+                    [(NUM) (num-exp $1)]
+                    [(VAR) (var-exp $1)]))))
 
 (define (eval parsed-exp)
   (match parsed-exp
@@ -85,28 +79,11 @@
 (define (lex-this lexer input)
   (lambda () (lexer input)))
 
-; uses different length functions for each datatype passed
-; string, list, pair,
-(define (length-ret param)
-  (cond
-    [(string? param) (string-length param)]
-    [(list? param) (length param)]
-    [else "other"]))
+(define (test_BIOR param1 param2)
+  (or param1 param2))
 
-; (let ([input (open-input-string "3 adtn 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
-; (let ([input (open-input-string "3 mltp 9")]) (eval (abrv_parse (lex-this abrv_lex input))))
+(define (test_BIND param1 param2)
+  (and param1 param2))
 
-(let ([input (open-input-string "crte foo 6 in 3 sbtn 3.3 adtn foo")])
-  (eval (abrv_parse (lex-this abrv_lex input))))
-
-(let ([input (open-input-string "6 dvsn 2")]) (eval (abrv_parse (lex-this abrv_lex input))))
-(let ([input (open-input-string "6 rmdr 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-(let ([input (open-input-string "6 rmdr 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (length-ret "hello there i am ahmed")
-; (length-ret "wow")
-; (length-ret '(1 2 3))
-; (length-ret '(1 . 2))
-
-; (let ([input (open-input-string "6 bior 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
+(let ([input (open-input-string "6 adtn 4 mltp 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
+(let ([input (open-input-string "6 mltp 4 adtn 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
