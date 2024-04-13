@@ -1,0 +1,39 @@
+abrv. (abbreviate)
+
+gnrl. (general)
+
+crte -> let/var ✅
+asgn -> = 
+tmnt -> ; 
+cbop -> {
+cbcl -> }
+rbop -> (
+rbcl -> )
+cmnt -> //
+
+oprt. (operators)
+
+mltp -> * ✅
+dvsn -> / ✅
+adtn -> + ✅
+sbtn -> - ✅
+rmdr -> % ✅
+
+
+cond. (conditionals)
+
+istr -> true ❎ racket doesn't have truthy/falsy values like JS 
+isfl -> false ❎ racket doesn't have truthy/falsy values like JS 
+iseq -> ==
+
+bior -> or
+bind -> and
+
+othr. (other)
+
+;; A string can be treated like a list of characters
+(string-ref "Apple" 0) ; => #\A
+
+accs num -> array[num]
+
+lnth -> datatype.length()
