@@ -25,28 +25,134 @@
                     [identifier (re-+ identifier-characters)])
 
 (define abrv_lex
-  (lexer ["sbtn" (token--)]
-         ["adtn" (token-+)]
-         ["crte" (token-CREATE)]
-         ["in" (token-IN)]
-         ["mltp" (token-*)]
-         ["dvsn" (token-/)]
-         ["rmdr" (token-%)]
-         ["bior" (token-BIOR)]
-         ["bind" (token-BIND)]
-         ["#f" (token-FALSE)]
-         ["#t" (token-TRUE)]
-         ["isgr" (token-GREATER)]
-         ["isls" (token-LESS)]
-         ["isne" (token-NOTEQUALS)]
-         ["iseq" (token-ISEQUALS)]
-         ["asgn" (token-ASGN)]
-         ["lprn" (token-LPRN)]
-         ["rprn" (token-RPRN)]
-         [(re-+ number10) (token-NUM (string->number lexeme))]
-         [identifier (token-VAR lexeme)]
-         [whitespace (abrv_lex input-port)]
-         [(eof) (token-EOF)]))
+  (lexer ["sbtn"
+          (begin
+            (printf "Next token is: SUB_OP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token--))]
+         ["adtn"
+          (begin
+            (printf "Next token is: ADD_OP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-+))]
+         ["crte"
+          (begin
+            (printf "Next token is: CREATE , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-CREATE))]
+         ["in"
+          (begin
+            (printf "Next token is: IN , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-IN))]
+         ["mltp"
+          (begin
+            (printf "Next token is: MULT_OP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-*))]
+         ["dvsn"
+          (begin
+            (printf "Next token is: DIV_OP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-/))]
+         ["rmdr"
+          (begin
+            (printf "Next token is: MODULO , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-%))]
+         ["bior"
+          (begin
+            (printf "Next token is: BIOR , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-BIOR))]
+         ["bind"
+          (begin
+            (printf "Next token is: BIND , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-BIND))]
+         ["#f"
+          (begin
+            (printf "Next token is: FALSE , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-FALSE))]
+         ["#t"
+          (begin
+            (printf "Next token is: TRUE , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-TRUE))]
+         ["isgr"
+          (begin
+            (printf "Next token is: GREATER , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-GREATER))]
+         ["isls"
+          (begin
+            (printf "Next token is: LESS , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-LESS))]
+         ["isne"
+          (begin
+            (printf "Next token is: NOTEQUALS , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-NOTEQUALS))]
+         ["iseq"
+          (begin
+            (printf "Next token is: ISEQUALS , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-ISEQUALS))]
+         ["asgn"
+          (begin
+            (printf "Next token is: ASGN , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-ASGN))]
+         ["lprn"
+          (begin
+            (printf "Next token is: LPRN , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-LPRN))]
+         ["rprn"
+          (begin
+            (printf "Next token is: RPRN , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-RPRN))]
+         [(re-+ number10)
+          (begin
+            (printf "Next token is: NUM , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-NUM (string->number lexeme)))]
+         [identifier
+          (begin
+            (printf "Next token is: VAR , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-VAR lexeme))]
+         [whitespace (abrv_lex input-port)] ; Skip whitespace
+         [(eof)
+          (begin
+            (printf "Next token is: EOF , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (newline)
+            (token-EOF))]))
 
 (define-struct let-exp (var num exp))
 (define-struct arith-exp (op e1 e2))
