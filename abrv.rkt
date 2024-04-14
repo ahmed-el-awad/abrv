@@ -104,41 +104,27 @@
 ;     Tests
 ;;;;;;;;;;;;;;;;;
 
+; helper function for the input
+(define (input str)
+  (let ([input (open-input-string str)]) (eval (abrv_parse (lex-this abrv_lex input)))))
+
 ; paren
-; (let ([input (open-input-string "lprn rprn")])
-;   (eval (abrv_parse (lex-this abrv_lex input)))) ; NOTE: NEEDS FIXING
 
-; (let ([input (open-input-string "x asgn lprn 5 isne 4 rprn ")])
-;   (eval (abrv_parse (lex-this abrv_lex input))))
+(input "lprn 5 rprn")
+(input "x asgn lprn 5 isne 4 rprn ")
+(input "lprn 3 adtn 3 rprn mltp 3")
+(input "lprn 3 mltp 3 rprn adtn 3")
+(input "lprn 3 adtn 3 rprn isne 6")
 
-; (let ([input (open-input-string "lprn 3 adtn 3 rprn mltp 3")])
-;   (eval (abrv_parse (lex-this abrv_lex input))))
+; assign
+(input "x asgn 4")
 
-; (let ([input (open-input-string "lprn 3 mltp 3 rprn adtn 3")])
-;   (eval (abrv_parse (lex-this abrv_lex input))))
-
-; ; create
-(let ([input (open-input-string "x asgn 4 ")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-x
-=
-4
-; (let ([input (open-input-string "lprn 3 adtn 3 rprn isne 6")])
-;   (eval (abrv_parse (lex-this abrv_lex input))))
-
-; ; logic operators
-; (let ([input (open-input-string "3 iseq 3")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "3 iseq 4")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "3 isne 4")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "3 isne 3")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "3 isgr 3")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "4 isgr 3")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "3 isls 3")]) (eval (abrv_parse (lex-this abrv_lex input))))
-
-; (let ([input (open-input-string "2 isls 3")]) (eval (abrv_parse (lex-this abrv_lex input))))
+; logic operators
+(input "3 iseq 3")
+(input "3 iseq 4")
+(input "3 isne 4")
+(input "3 isne 3")
+(input "3 isgr 3")
+(input "4 isgr 3")
+(input "3 isls 3")
+(input "2 isls 3")
