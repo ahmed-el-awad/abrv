@@ -230,11 +230,22 @@
 (input "lprn 3 adtn 3 rprn mltp 3")
 (input "lprn 3 mltp 3 rprn adtn 3")
 (input "lprn 3 adtn 3 rprn isne 6")
+(input "lprn 3 adtn 2 rprn mltp 5")
 
 ; assign
+(input "42")
 (input "x asgn 4")
+(input "x asgn 5 y asgn x mltp 2 x mltp y")
+(input "x asgn lprn 10 dvsn lprn 2 adtn 3 rprn rprn")
 
-; relational operators
+; mathmetical
+(input "3 adtn 4")
+(input "5 sbtn 2")
+(input "7 mltp 3")
+(input "10 dvsn 2")
+(input "10 rmdr 3")
+
+; relational
 (input "3 iseq 3")
 (input "3 iseq 4")
 (input "3 isne 4")
@@ -243,10 +254,13 @@
 (input "4 isgr 3")
 (input "3 isls 3")
 (input "2 isls 3")
+(input "5 isgr 3")
+(input "2 isls 3")
+(input "5 isne 5")
 
-; logic operators
+; logic
+(input "true")
+(input "flse")
 (input "true bind flse")
 (input "true bior flse")
-(input "3 bind flse")
-(input "3 bior flse")
-(input "true bind 3")
+(input "3 adtn 2 mltp 5")
