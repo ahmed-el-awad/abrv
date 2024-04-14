@@ -4,19 +4,13 @@
 
 crte -> let/var ⚠️
 
-asgn -> =
+asgn -> = ✅
 
 tmnt -> ;
 
-cbop -> {
+lprn -> ( ✅
 
-cbcl -> }
-
-rbop -> (
-
-rbcl -> )
-
-cmnt -> //
+rprn -> ) ✅
 
 ## oprt. (operators)
 
@@ -32,13 +26,13 @@ rmdr -> % ✅
 
 ## cond. (conditionals)
 
-iseq -> ==
+iseq -> == ✅
 
-isgr -> >
+isne -> != ✅
 
-isls -> <
+isgr -> > ✅
 
-isne -> !=
+isls -> < ✅
 
 bior -> or ⚠️
 
