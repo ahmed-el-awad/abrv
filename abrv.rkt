@@ -79,13 +79,13 @@
             (display lexeme)
             (newline)
             (token-BIND))]
-         ["#f"
+         ["flse"
           (begin
             (printf "Next token is: FALSE , next lexeme is ")
             (display lexeme)
             (newline)
             (token-FALSE))]
-         ["#t"
+         ["true"
           (begin
             (printf "Next token is: TRUE , next lexeme is ")
             (display lexeme)
@@ -166,6 +166,8 @@
           (tokens a b)
           (precs (left + -) (left * / %) (left GREATER LESS NOTEQUALS ISEQUALS) (right ASGN))
           (grammar (exp ;
+                    ((FALSE) (num-exp #f))
+                    ((TRUE) (num-exp #t))
                     ((exp % exp) (make-arith-exp remainder $1 $3))
                     ((exp * exp) (make-arith-exp * $1 $3))
                     ((exp / exp) (make-arith-exp / $1 $3))
@@ -215,9 +217,8 @@
   (let ([input (open-input-string str)]) (eval (abrv_parse (lex-this abrv_lex input)))))
 
 ; paren
-
 (input "lprn 5 rprn")
-(input "x asgn lprn 5 isne 4 rprn ")
+(input "x asgn lprn 5 isne 4 rprn")
 (input "lprn 3 adtn 3 rprn mltp 3")
 (input "lprn 3 mltp 3 rprn adtn 3")
 (input "lprn 3 adtn 3 rprn isne 6")
@@ -225,7 +226,7 @@
 ; assign
 (input "x asgn 4")
 
-; logic operators
+; relational operators
 (input "3 iseq 3")
 (input "3 iseq 4")
 (input "3 isne 4")
@@ -234,3 +235,10 @@
 (input "4 isgr 3")
 (input "3 isls 3")
 (input "2 isls 3")
+
+; logic operators
+(input "true bind flse")
+(input "true bior flse")
+(input "3 bind flse")
+(input "3 bior flse")
+(input "true bind 3")

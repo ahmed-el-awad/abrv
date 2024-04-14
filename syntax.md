@@ -39,3 +39,7 @@ isls -> < ✅
 bior -> or ⚠️
 
 bind -> and ⚠️
+
+true -> true ✅
+
+flse -> false ✅
