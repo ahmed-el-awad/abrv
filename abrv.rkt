@@ -8,7 +8,7 @@
 (define-tokens a (NUM VAR))
 (define-empty-tokens
  b
- (+ - * / % BIND CREATE FALSE TRUE IN EOF BIOR GREATER LESS NOTEQUALS ISEQUALS ASGN LPRN RPRN))
+ (+ - * / % BIND FALSE TRUE EOF BIOR GREATER LESS NOTEQUALS ISEQUALS ASGN LPRN RPRN IFOP THOP ELOP))
 
 (define-lex-trans
  number
@@ -37,18 +37,6 @@
             (display lexeme)
             (newline)
             (token-+))]
-         ["crte"
-          (begin
-            (printf "Next token is: CREATE , next lexeme is ")
-            (display lexeme)
-            (newline)
-            (token-CREATE))]
-         ["in"
-          (begin
-            (printf "Next token is: IN , next lexeme is ")
-            (display lexeme)
-            (newline)
-            (token-IN))]
          ["mltp"
           (begin
             (printf "Next token is: MULT_OP , next lexeme is ")
@@ -133,6 +121,24 @@
             (display lexeme)
             (newline)
             (token-RPRN))]
+         ["ifop"
+          (begin
+            (printf "Next token is: IFOP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-IFOP))]
+         ["thop"
+          (begin
+            (printf "Next token is: THOP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-THOP))]
+         ["elop"
+          (begin
+            (printf "Next token is: ELOP , next lexeme is ")
+            (display lexeme)
+            (newline)
+            (token-ELOP))]
          [(re-+ number10)
           (begin
             (printf "Next token is: NUM , next lexeme is ")
@@ -157,6 +163,7 @@
 (define-struct arith-exp (op e1 e2))
 (define-struct num-exp (n))
 (define-struct var-exp (i))
+(define-struct if-exp (condition then-branch else-branch))
 
 (define abrv_parse
   (parser (start exp)
@@ -179,7 +186,7 @@
                     ((exp NOTEQUALS exp) (make-arith-exp (lambda (x y) (not (= x y))) $1 $3))
                     ((exp ISEQUALS exp) (make-arith-exp = $1 $3))
                     ((VAR ASGN exp) (make-let-exp $1 (var-exp $1) $3))
-                    ((CREATE VAR NUM IN exp) (make-let-exp $2 (num-exp $3) $5))
+                    ((IFOP exp THOP exp ELOP exp) (make-if-exp $2 $4 $6))
                     ((NUM) (num-exp $1))
                     ((VAR) (var-exp $1))
                     ((LPRN exp RPRN) $2)))))
@@ -189,7 +196,9 @@
     [(let-exp var num exp) (eval (subst var num exp))]
     [(arith-exp op e1 e2) (op (eval e1) (eval e2))]
     [(num-exp n) n]
-    [(var-exp i) (error 'eval "undefined identifier ~a" i)]))
+    [(var-exp i) (error 'eval "undefined identifier ~a" i)]
+    [(if-exp condition then-branch else-branch)
+     (if (eval condition) (eval then-branch) (eval else-branch))]))
 
 (define (subst var num exp)
   (match exp
