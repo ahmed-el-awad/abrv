@@ -151,7 +151,6 @@
             (printf "Next token is: EOF , next lexeme is ")
             (display lexeme)
             (newline)
-            (newline)
             (token-EOF))]))
 
 (define-struct let-exp (var num exp))
