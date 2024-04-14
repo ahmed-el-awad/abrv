@@ -39,11 +39,6 @@
          [whitespace (abrv_lex input-port)] ; recursively calls the lexer
          [(eof) (token-EOF)]))
 
-(define-struct let-exp (var num exp))
-(define-struct arith-exp (op e1 e2))
-(define-struct num-exp (n))
-(define-struct var-exp (i))
-
 (define abrv_parse
   (parser (start exp)
           (end EOF)
@@ -61,6 +56,11 @@
                     [(CREATE VAR NUM IN exp) (make-let-exp $2 (num-exp $3) $5)]
                     [(NUM) (num-exp $1)]
                     [(VAR) (var-exp $1)]))))
+
+(define-struct let-exp (var num exp))
+(define-struct arith-exp (op e1 e2))
+(define-struct num-exp (n))
+(define-struct var-exp (i))
 
 (define (eval parsed-exp)
   (match parsed-exp
@@ -85,5 +85,7 @@
 (define (test_BIND param1 param2)
   (and param1 param2))
 
-(let ([input (open-input-string "6 adtn 4 mltp 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
+(let ([input (open-input-string "3 bior 4")]) (eval (abrv_parse (lex-this abrv_lex input))))
+(let ([input (open-input-string "3 bind 4")]) (eval (abrv_parse (lex-this abrv_lex input))))
+
 (let ([input (open-input-string "6 mltp 4 adtn 5")]) (eval (abrv_parse (lex-this abrv_lex input))))
