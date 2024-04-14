@@ -4,9 +4,7 @@
 
 crte -> let/var ⚠️
 
-asgn -> = ✅
-
-tmnt -> ;
+asgn -> = ⚠️
 
 lprn -> ( ✅
 
@@ -36,9 +34,9 @@ isls -> < ✅
 
 ## lgcl. (logical)
 
-bior -> or ⚠️
+bior -> or ✅
 
-bind -> and ⚠️
+bind -> and ✅
 
 true -> true ✅
 
