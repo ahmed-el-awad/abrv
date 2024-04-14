@@ -24,7 +24,7 @@ sbtn -> - ✅
 
 rmdr -> % ✅
 
-## cond. (conditionals)
+## rltn. (relational)
 
 iseq -> == ✅
 
@@ -33,6 +33,8 @@ isne -> != ✅
 isgr -> > ✅
 
 isls -> < ✅
+
+## lgcl. (logical)
 
 bior -> or ⚠️
 
