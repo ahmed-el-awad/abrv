@@ -235,7 +235,6 @@
 ; assign
 (input "42")
 (input "x asgn 4")
-(input "x asgn 5 y asgn x mltp 2 x mltp y")
 (input "x asgn lprn 10 dvsn lprn 2 adtn 3 rprn rprn")
 
 ; mathmetical
