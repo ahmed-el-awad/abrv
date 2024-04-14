@@ -224,42 +224,46 @@
 (define (input str)
   (let ([input (open-input-string str)]) (eval (abrv_parse (lex-this abrv_lex input)))))
 
-; paren
-(input "lprn 5 rprn")
-(input "x asgn lprn 5 isne 4 rprn")
-(input "lprn 3 adtn 3 rprn mltp 3")
-(input "lprn 3 mltp 3 rprn adtn 3")
-(input "lprn 3 adtn 3 rprn isne 6")
-(input "lprn 3 adtn 2 rprn mltp 5")
+; parentheses
+(input "lprn 5 rprn") ; expected 5
+(input "x asgn lprn 5 isne 4 rprn") ; expected #t
+(input "lprn 3 adtn 3 rprn mltp 3") ; expected 18
+(input "lprn 3 mltp 3 rprn adtn 3") ; expected 12
+(input "lprn 3 adtn 3 rprn isne 6") ; expected #f
+(input "lprn 3 adtn 2 rprn mltp 5") ; expected 25
+(input "x asgn lprn 10 dvsn lprn 2 adtn 3 rprn rprn") ; expected 2
 
 ; assign
-(input "42")
-(input "x asgn 4")
-(input "x asgn lprn 10 dvsn lprn 2 adtn 3 rprn rprn")
+(input "42") ; expected 42
+(input "x asgn 4") ; expected 4
 
 ; mathmetical
-(input "3 adtn 4")
-(input "5 sbtn 2")
-(input "7 mltp 3")
-(input "10 dvsn 2")
-(input "10 rmdr 3")
+(input "3 adtn 5") ; expected 8
+(input "5 sbtn 2") ; expected 3
+(input "7 mltp 3") ; expected 21
+(input "10 dvsn 2") ; expected 5
+(input "10 rmdr 3") ; expected 1
+(input "3 adtn 2 mltp 5") ; expected 13
 
 ; relational
-(input "3 iseq 3")
-(input "3 iseq 4")
-(input "3 isne 4")
-(input "3 isne 3")
-(input "3 isgr 3")
-(input "4 isgr 3")
-(input "3 isls 3")
-(input "2 isls 3")
-(input "5 isgr 3")
-(input "2 isls 3")
-(input "5 isne 5")
+(input "3 iseq 3") ; expected #t
+(input "3 iseq 4") ; expected #f
+(input "3 isne 4") ; expected #t
+(input "3 isne 3") ; expected #f
+(input "3 isgr 3") ; expected #f
+(input "4 isgr 3") ; expected #t
+(input "3 isls 3") ; expected #f
+(input "2 isls 3") ; expected #t
+(input "5 isgr 3") ; expected #t
+(input "2 isls 3") ; expected #t
+(input "5 isne 5") ; expected #f
 
 ; logic
-(input "true")
-(input "flse")
-(input "true bind flse")
-(input "true bior flse")
-(input "3 adtn 2 mltp 5")
+(input "true") ; expected #t
+(input "flse") ; expected #f
+(input "true bind flse") ; expected #f
+(input "true bior flse") ; expected #t
+
+; conditional
+(input "ifop 3 isls 5 thop y asgn 10 elop y asgn 20") ; expected 10
+(input "ifop 3 isgr 5 thop y asgn 10 elop y asgn 20") ; expected 20
