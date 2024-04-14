@@ -6,6 +6,6 @@ A custom language made with [Racket](https://racket-lang.org/).
 
 ✅ is implemented.
 
-⚠️ is implemented, but not tested.
+⚠️ is implemented, but not tested extensively.
 
 Everything else is currently being implemented/reconsidered.
