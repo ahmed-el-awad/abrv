@@ -2,8 +2,6 @@
 
 ## gnrl. (general)
 
-crte -> let/var ⚠️
-
 asgn -> = ⚠️
 
 lprn -> ( ✅
@@ -41,3 +39,11 @@ bind -> and ✅
 true -> true ✅
 
 flse -> false ✅
+
+## cndt. (conditionals)
+
+ifop -> if
+
+thop -> then
+
+elop -> else
