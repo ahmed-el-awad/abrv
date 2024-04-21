@@ -42,8 +42,8 @@ flse -> false ✅
 
 ## cndt. (conditionals)
 
-ifop -> if
+ifop -> if ⚠️
 
-thop -> then
+thop -> then ⚠️
 
-elop -> else
+elop -> else ⚠️
